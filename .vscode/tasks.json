@@ -7,7 +7,7 @@
             "command": "gcc",
             "args": [
                 "-g",
-                "${file}",
+                "${workspaceFolder}//src//*.c",
                 "-o",
                 "${workspaceFolder}//bin//${workspaceFolderBasename}.exe",
                 "-I", "include",
@@ -17,7 +17,7 @@
                 "-lwinmm"
             ],
             "options": {
-                "cwd": "${fileDirname}"
+                "cwd": "${workspaceFolder}"
             },
             "problemMatcher": [
                 "$gcc"
