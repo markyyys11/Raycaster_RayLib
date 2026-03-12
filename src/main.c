@@ -5,14 +5,14 @@
 
 int main(void) {
     InitWindow(screenWidth, screenHeight, "Raylib Project");
-    InitRandomWalls(10);
+    InitWalls(10);
 
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(BLACK);
         
         MovePlayer();
-        DrawWallsByRays(player);
+        DrawWalls(player);
         
         DrawFPS(5, 5);
         EndDrawing();
