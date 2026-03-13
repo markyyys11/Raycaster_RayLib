@@ -6,9 +6,10 @@ static const int screenHeight = 600;
 
 static const int raysCount = 10;
 static const float fov = 50.0f;
+static const int dof = 10;
 
 static const float cameraSpeed = 0.001f;
-static const float moveSpeed = 0.02f;
+static const float moveSpeed = 0.002f;
 
 static const int mapWidth = 10;
 static const int mapHeight = 10;

@@ -4,7 +4,7 @@
 #include "player.h"
 #include "settings.h"
 
-Player player = { .position = { 400.0f, 300.0f }, .angle = 0.0f };
+Player player = { .position = { mapWidth / 2, mapHeight / 2 }, .angle = 0.0f };
 
 
 void MovePlayer() {
