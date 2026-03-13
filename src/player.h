@@ -4,6 +4,6 @@
 #include "types.h"
 
 extern Player player;
-void MovePlayer(void);
+void MovePlayer();
 
 #endif //PLAYER_H
