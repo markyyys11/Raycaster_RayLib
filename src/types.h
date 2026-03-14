@@ -14,6 +14,18 @@ typedef struct {
     float angle;
 } Ray2D;
 
+typedef struct {
+    int x;
+    int y;
+} Cell;
+
+
+typedef struct {
+    bool polar;
+    float distance;
+    Cell cell;
+} RaycastHit;
+
 // typedef struct {
 //     Vector2 start;
 //     Vector2 end;
