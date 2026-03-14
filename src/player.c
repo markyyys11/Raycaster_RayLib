@@ -4,28 +4,25 @@
 #include "player.h"
 #include "settings.h"
 
-Player player = { .position = { mapWidth / 2, mapHeight / 2 }, .angle = 0.0f };
-
-
-void MovePlayer() {
+void MovePlayer(Player *player) {
     if (IsKeyDown(KEY_W)) {
-        player.position.x += moveSpeed * cosf(player.angle);
-        player.position.y += moveSpeed * sinf(player.angle);
+        player->position.x += moveSpeed * cosf(player->angle);
+        player->position.y += moveSpeed * sinf(player->angle);
     }
     else if (IsKeyDown(KEY_S)) {
-        player.position.x -= moveSpeed * cosf(player.angle);
-        player.position.y -= moveSpeed * sinf(player.angle);
+        player->position.x -= moveSpeed * cosf(player->angle);
+        player->position.y -= moveSpeed * sinf(player->angle);
     }
 
     if (IsKeyDown(KEY_D)) {
-        player.position.x += moveSpeed * cosf(player.angle + (90 * DEG2RAD));
-        player.position.y += moveSpeed * sinf(player.angle + (90 * DEG2RAD));
+        player->position.x += moveSpeed * cosf(player->angle + (90 * DEG2RAD));
+        player->position.y += moveSpeed * sinf(player->angle + (90 * DEG2RAD));
     }
     else if (IsKeyDown(KEY_A)) {
-        player.position.x -= moveSpeed * cosf(player.angle + (90 * DEG2RAD));
-        player.position.y -= moveSpeed * sinf(player.angle + (90 * DEG2RAD));
+        player->position.x -= moveSpeed * cosf(player->angle + (90 * DEG2RAD));
+        player->position.y -= moveSpeed * sinf(player->angle + (90 * DEG2RAD));
     }
 
-    if (IsKeyDown(KEY_RIGHT)) player.angle += cameraSpeed;
-    else if (IsKeyDown(KEY_LEFT)) player.angle -= cameraSpeed;
+    if (IsKeyDown(KEY_RIGHT)) player->angle += cameraSpeed;
+    else if (IsKeyDown(KEY_LEFT)) player->angle -= cameraSpeed;
 }

@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-extern Player player;
-void MovePlayer();
+// extern Player player;
+void MovePlayer(Player *player);
 
 #endif //PLAYER_H
