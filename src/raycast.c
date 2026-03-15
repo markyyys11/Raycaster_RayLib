@@ -90,10 +90,13 @@ void Raycast(const Player player, Ray2D rays[raysCount], RaycastHit hits[raysCou
         float horLen = 9999, verLen = 9999;
         horLen = sqrtf(powf(horX - player.position.x, 2) + powf(horY - player.position.y, 2)); 
         verLen = sqrtf(powf(verX - player.position.x, 2) + powf(verY - player.position.y, 2));
-        Cell cell = {.x = (int)(horLen < verLen ? horX : verX), .y = (int)(horLen < verLen ? horY : verY)};
+
+        Vector2 position = {.x = horLen < verLen ? horX : verX, .y = horLen < verLen ? horY : verY};
+        Cell cell = {.x = (int)position.x, .y = (int)position.y};
 
         hits[i].distance = horLen < verLen ? horLen : verLen;        
         hits[i].cell = cell;
+        hits[i].position = position;
         hits[i].polar = horLen < verLen ? true : false;
     }   
 }

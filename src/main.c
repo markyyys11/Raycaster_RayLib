@@ -5,11 +5,14 @@
 #include "render2d.h"
 #include "render3d.h"
 #include "raycast.h"
+#include "resources.h"
 
 int main(void) {
     InitWindow(screenWidth, screenHeight, "Raylib Project");
 
-    Player player = {.position.x = mapWidth / 2, .position.y = mapHeight / 2, .angle = 0};
+    LoadResources();
+
+    Player player = {.position.x = 5.0f, .position.y = 5.0f, .angle = 0};
     Ray2D rays[raysCount];
     RaycastHit hits[raysCount];
 
@@ -22,14 +25,17 @@ int main(void) {
     Vector2 origin = { 0, 0 };
 
     Color *pixels = (Color *)img.data;
+
+    BeginRenderRaycast();
     while (!WindowShouldClose()) {
+        BeginDrawing();
         MovePlayer(&player);
         Raycast(player, rays, hits);
         Draw3D(textureWidth, textureHeight, player, rays, hits, pixels);
         
         UpdateTexture(tex, img.data);
 
-        BeginDrawing();
+        
         ClearBackground(BLACK);
         Draw2D(player, rays, hits);
         DrawTexturePro(tex, source, dest, origin, 0.0f, WHITE);
@@ -38,6 +44,9 @@ int main(void) {
 
         ImageClearBackground(&img, BLANK);
     }
+    EndRenderRaycast();
+
+    UnloadResources();
 
     UnloadTexture(tex);
     UnloadImage(img);

@@ -2,9 +2,10 @@
 #define RESOURCES_H
 
 #include "raylib.h"
+#include "settings.h"
 
-extern Image wallTextures[];
-
-void LoadResources(char *dirPath);
+void LoadResources();
+void GetTexture(const int index, const int width, const int height, Color *pixels);
+void UnloadResources();
 
 #endif // RESOURCES_H

@@ -1,0 +1,123 @@
+=thread-group-added,id="i1"
+Warning: Debuggee TargetArchitecture not detected, assuming x86_64.
+=cmd-param-changed,param="pagination",value="off"
+[New Thread 28508.0x7ad4]
+[New Thread 28508.0x7438]
+[New Thread 28508.0x5298]
+
+Thread 1 hit Breakpoint 1, 0x00007ff6cd471397 in main () at C:/CProj/Raycaster_RayLib/src/main.c:10
+10	int main(void) {
+Loaded 'C:\WINDOWS\SYSTEM32\ntdll.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\kernel32.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\KernelBase.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\gdi32.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\win32u.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\gdi32full.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\msvcp_win.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\ucrtbase.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\user32.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\msvcrt.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\shell32.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\WinTypes.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\combase.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\rpcrt4.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\winmm.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\imm32.dll'. Symbols loaded.
+[New Thread 28508.0x618]
+[New Thread 28508.0x76bc]
+[New Thread 28508.0x456c]
+[New Thread 28508.0x7280]
+[New Thread 28508.0x70d0]
+[New Thread 28508.0x14fc]
+[Thread 28508.0x7280 exited with code 0]
+[Thread 28508.0x70d0 exited with code 0]
+[Thread 28508.0x14fc exited with code 0]
+[New Thread 28508.0x2ac8]
+[New Thread 28508.0x4668]
+[New Thread 28508.0x173c]
+=library-unloaded,id="C:\\WINDOWS\\System32\\psapi.dll",target-name="C:\\WINDOWS\\System32\\psapi.dll",host-name="C:\\WINDOWS\\System32\\psapi.dll",thread-group="i1"
+=library-unloaded,id="C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",target-name="C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",host-name="C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",thread-group="i1"
+=library-unloaded,id="C:\\WINDOWS\\System32\\psapi.dll",target-name="C:\\WINDOWS\\System32\\psapi.dll",host-name="C:\\WINDOWS\\System32\\psapi.dll",thread-group="i1"
+=library-unloaded,id="C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",target-name="C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",host-name="C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",thread-group="i1"
+=library-unloaded,id="C:\\WINDOWS\\System32\\psapi.dll",target-name="C:\\WINDOWS\\System32\\psapi.dll",host-name="C:\\WINDOWS\\System32\\psapi.dll",thread-group="i1"
+=library-unloaded,id="C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",target-name="C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",host-name="C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",thread-group="i1"
+=library-unloaded,id="C:\\WINDOWS\\System32\\psapi.dll",target-name="C:\\WINDOWS\\System32\\psapi.dll",host-name="C:\\WINDOWS\\System32\\psapi.dll",thread-group="i1"
+=library-unloaded,id="C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",target-name="C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",host-name="C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",thread-group="i1"
+[New Thread 28508.0x7b74]
+[New Thread 28508.0x78b8]
+[Thread 28508.0x78b8 exited with code 0]
+[New Thread 28508.0x9ac]
+
+Thread 16 received signal SIGTRAP, Trace/breakpoint trap.
+[Switching to Thread 28508.0x9ac]
+0x00007ff8c4d3d979 in ntdll!LdrResSearchResource () from C:\WINDOWS\SYSTEM32\ntdll.dll
+Loaded 'C:\WINDOWS\SYSTEM32\dinput8.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\advapi32.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\sechost.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\XInput1_4.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\cfgmgr32.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\devobj.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\dwmapi.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\InputHost.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\CoreMessaging.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\SHCore.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\system32\uxtheme.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\bcryptprimitives.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\cryptbase.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\msctf.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\hid.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\setupapi.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\wintrust.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\crypt32.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\msasn1.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\windows.storage.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\opengl32.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\glu32.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\DXCore.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\Windows.StateRepositoryCore.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\DriverStore\FileRepository\nvmdi.inf_amd64_cc0a63ee9d9b83b2\nvoglv64.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\ole32.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\oleaut32.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\version.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\wtsapi32.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\sspicli.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\cryptnet.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\wldp.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\drvstore.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\ntmarta.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\imagehlp.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\cryptsp.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\system32\rsaenh.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\bcrypt.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\DriverStore\FileRepository\nvmdi.inf_amd64_cc0a63ee9d9b83b2\nvgpucomp64.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\shlwapi.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\system32\nvspcap64.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\profapi.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\powrprof.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\umpdc.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\winsta.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\kernel.appcore.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\TextInputFramework.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\SYSTEM32\CoreUIComponents.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\system32\oleacc.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\System32\clbcatq.dll'. Symbols loaded.
+Loaded 'C:\WINDOWS\system32\ApplicationTargetedFeatureDatabase.dll'. Symbols loaded.
+Loaded 'C:\Windows\System32\twinapi.appcore.dll'. Symbols loaded.
+Execute debugger commands using "-exec <command>", for example "-exec info registers" will list registers in use (when GDB is the debugger)
+
+Thread 16 received signal ?, Unknown signal.
+0x00007ff8c4db76e5 in ntdll!RtlpMuiRegCreateRegistryInfo () from C:\WINDOWS\SYSTEM32\ntdll.dll
+[Thread 28508.0x4668 exited with code 3221226356]
+[Thread 28508.0x9ac exited with code 3221226356]
+[Thread 28508.0x2ac8 exited with code 3221226356]
+[Thread 28508.0x79ec exited with code 3221226356]
+[Thread 28508.0x7ad4 exited with code 3221226356]
+[Thread 28508.0x7b74 exited with code 3221226356]
+[Thread 28508.0x173c exited with code 3221226356]
+[Thread 28508.0x7438 exited with code 3221226356]
+[Thread 28508.0x456c exited with code 3221226356]
+[Thread 28508.0x5298 exited with code 3221226356]
+[Thread 28508.0x618 exited with code 3221226356]
+[Inferior 1 (process 28508) exited with code 030000001564]
+The program 'C:\CProj\Raycaster_RayLib//bin//Raycaster_RayLib.exe' has exited with code -1 (0xffffffff).
+

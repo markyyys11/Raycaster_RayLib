@@ -23,6 +23,7 @@ typedef struct {
     bool polar;
     float distance;
     Cell cell;
+    Vector2 position;
 } RaycastHit;
 
 #endif //TYPES_H
