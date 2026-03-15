@@ -30,7 +30,7 @@ void Raycast(const Player player, Ray2D rays[raysCount], RaycastHit hits[raysCou
             deltaHorY = 1;
         }
         else if (ray.sinAngle < 0) {
-            horY = -((player.position.y - floor(player.position.y)) + 0.001f);
+            horY = -((player.position.y - floor(player.position.y)) + 0.00001f);
             horX = horY / tanf(ray.angle);
             deltaHorY = -1;
         } else {
@@ -49,7 +49,7 @@ void Raycast(const Player player, Ray2D rays[raysCount], RaycastHit hits[raysCou
             verY = verX * tanf(ray.angle);
             deltaVerX = 1; 
         } else if (ray.cosAngle < 0) {
-            verX = -((player.position.x - floor(player.position.x)) + 0.001f);
+            verX = -((player.position.x - floor(player.position.x)) + 0.00001f);
             verY = verX * tanf(ray.angle);
             deltaVerX = -1;
         } else {
@@ -67,7 +67,7 @@ void Raycast(const Player player, Ray2D rays[raysCount], RaycastHit hits[raysCou
         while (dofIter < dof) {
             if (ray.sinAngle == 0) break;
             if (horX < 0 || horX > mapWidth || horY < 0 || horY > mapHeight) break;
-            if (walls[(int)(horY) * mapHeight + (int)(horX)] > 0) break;
+            if (walls[(int)(horY) * mapWidth + (int)(horX)] > 0) break;
 
             horX += deltaHorX;
             horY += deltaHorY;
@@ -79,7 +79,7 @@ void Raycast(const Player player, Ray2D rays[raysCount], RaycastHit hits[raysCou
         while (dofIter < dof) {
             if (ray.cosAngle == 0)  break;
             if (verX < 0 || verX > mapWidth || verY < 0 || verY > mapHeight) break;
-            if (walls[(int)(verY) * mapHeight + (int)(verX)] > 0) break;
+            if (walls[(int)(verY) * mapWidth + (int)(verX)] > 0) break;
 
             verX += deltaVerX;
             verY += deltaVerY;
@@ -90,7 +90,7 @@ void Raycast(const Player player, Ray2D rays[raysCount], RaycastHit hits[raysCou
         float horLen = 9999, verLen = 9999;
         horLen = sqrtf(powf(horX - player.position.x, 2) + powf(horY - player.position.y, 2)); 
         verLen = sqrtf(powf(verX - player.position.x, 2) + powf(verY - player.position.y, 2));
-        Cell cell = {.x = (int)horLen < verLen ? horX : verX, .y = (int)horLen < verLen ? horY : verY};
+        Cell cell = {.x = (int)(horLen < verLen ? horX : verX), .y = (int)(horLen < verLen ? horY : verY)};
 
         hits[i].distance = horLen < verLen ? horLen : verLen;        
         hits[i].cell = cell;
