@@ -21,27 +21,27 @@ int main(void) {
     Texture2D tex = LoadTextureFromImage(img);
 
     Rectangle source = { 0, 0, (float)textureWidth, (float)textureHeight };
-    Rectangle dest = { 600, 0, (float)screenWidth - 600, (float)screenHeight };
+    Rectangle dest = { 0, 0, (float)screenWidth, (float)screenHeight };
     Vector2 origin = { 0, 0 };
 
     Color *pixels = (Color *)img.data;
 
-    BeginRenderRaycast();
+    LoadTextureBuffer();
     while (!WindowShouldClose()) {
         BeginDrawing();
             MovePlayer(&player);
             Raycast(player, rays, hits);
             Draw3D(textureWidth, textureHeight, player, rays, hits, pixels);
             UpdateTexture(tex, img.data);
-            ClearBackground(BLACK);
-            Draw2D(player, rays, hits);
+            // ClearBackground(BLACK);
+            // Draw2D(player, rays, hits);
             DrawTexturePro(tex, source, dest, origin, 0.0f, WHITE);
             DrawFPS(5, 5);
         EndDrawing();
 
-        ImageClearBackground(&img, BLANK);
+        ImageClearBackground(&img, BLACK);
     }
-    EndRenderRaycast();
+    UnloadTextureBuffer();
 
     UnloadResources();
 
