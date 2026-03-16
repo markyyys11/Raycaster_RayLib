@@ -7,51 +7,55 @@
 
 void MovePlayer(Player *player) {
     float deltaTime = GetFrameTime();
+
+    float upDownX = moveSpeed * cosf(player->angle) * deltaTime,
+        upDownY = moveSpeed * sinf(player->angle) * deltaTime,
+        leftRightX = moveSpeed * cosf(player->angle + (90 * DEG2RAD)) * deltaTime,
+        leftRightY = moveSpeed * sinf(player->angle + (90 * DEG2RAD)) * deltaTime;
+
+    Cell collFront = {
+        player->position.x + (cosf(player->angle) * collisionDistance),
+        player->position.y + (sinf(player->angle) * collisionDistance)
+    };
+
+    Cell collBack = {
+        player->position.x - (cosf(player->angle) * collisionDistance),
+        player->position.y - (sinf(player->angle) * collisionDistance)
+    };
+
+    Cell collRight = {
+        player->position.x + (cosf(player->angle + (90 * DEG2RAD)) * collisionDistance),
+        player->position.y + (sinf(player->angle + (90 * DEG2RAD)) * collisionDistance)
+    };
+
+    Cell collLeft = {
+        player->position.x - (cosf(player->angle + (90 * DEG2RAD)) * collisionDistance),
+        player->position.y - (sinf(player->angle + (90 * DEG2RAD)) * collisionDistance)
+    };
+
     if (IsKeyDown(KEY_W)) {
-        player->position.x += (moveSpeed * cosf(player->angle)) * deltaTime;
-        player->position.y += moveSpeed * sinf(player->angle) * deltaTime;
-    }
-    else if (IsKeyDown(KEY_S)) {
-        player->position.x -= moveSpeed * cosf(player->angle) * deltaTime;
-        player->position.y -= moveSpeed * sinf(player->angle) * deltaTime;
+        player->position.x += upDownX;
+        player->position.y += upDownY;
+    } else if (IsKeyDown(KEY_S)) {
+        player->position.x -= upDownX;
+        player->position.y -= upDownY;
     }
 
     if (IsKeyDown(KEY_D)) {
-        player->position.x += moveSpeed * cosf(player->angle + (90 * DEG2RAD)) * deltaTime;
-        player->position.y += moveSpeed * sinf(player->angle + (90 * DEG2RAD)) * deltaTime;
+        player->position.x += leftRightX;
+        player->position.y += leftRightY;
+    } else if (IsKeyDown(KEY_A)) {
+        player->position.x -= leftRightX;
+        player->position.y -= leftRightY;
     }
-    else if (IsKeyDown(KEY_A)) {
-        player->position.x -= moveSpeed * cosf(player->angle + (90 * DEG2RAD)) * deltaTime;
-        player->position.y -= moveSpeed * sinf(player->angle + (90 * DEG2RAD)) * deltaTime;
-    }
 
-    // Vector2 collPointFront = {
-    //     player->position.x + (cosf(player->angle) * collisionDistance),
-    //     player->position.y + (sinf(player->angle) * collisionDistance)
-    // };
+    DrawCircle(player->position.x * tileSize, player->position.y * tileSize, 5, RED);
+    
 
-    // Vector2 collPointBack = {
-    //     player->position.x - (cosf(player->angle) * collisionDistance),
-    //     player->position.y - (sinf(player->angle) * collisionDistance)
-    // };
-
-    // Vector2 collPointRight = {
-    //     player->position.x + (cosf(player->angle + (90 * DEG2RAD)) * collisionDistance),
-    //     player->position.y + (sinf(player->angle + (90 * DEG2RAD)) * collisionDistance)
-    // };
-
-    // Vector2 collPointLeft = {
-    //     player->position.x - (cosf(player->angle + (90 * DEG2RAD)) * collisionDistance),
-    //     player->position.y - (sinf(player->angle + (90 * DEG2RAD)) * collisionDistance)
-    // };
-
-    // if (walls[(int)(collPointFront.y * mapWidth + collPointFront.x)] > 0) {
-    //     player->position.x += collPointFront.x - (int)collPointFront.x;
-    //     player->position.y -= collPointFront.y - (int)collPointFront.y;
-    // }
-
-    // DrawCircleV(collPointFront, 5, RED);
+    // DrawCircle(collPointFront.x * tileSize, collPointFront.y * tileSize, 5, RED);
 
     if (IsKeyDown(KEY_RIGHT)) player->angle += cameraSpeed * deltaTime;
     else if (IsKeyDown(KEY_LEFT)) player->angle -= cameraSpeed * deltaTime;
 }
+
+

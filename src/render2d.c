@@ -30,7 +30,7 @@ void Draw2D(const Player player, const Ray2D rays[raysCount], const RaycastHit h
                 (player.position.x + hits[i].distance * rays[i].cosAngle) * tileSize, 
                 (player.position.y + hits[i].distance * rays[i].sinAngle) * tileSize, color);
 
-        DrawCircle(hits[i].cell.x * tileSize, hits[i].cell.y * tileSize, 5, RED);
+        // DrawCircle(hits[i].cell.x * tileSize, hits[i].cell.y * tileSize, 5, RED);
     }
 }
 

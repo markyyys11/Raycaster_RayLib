@@ -29,17 +29,14 @@ int main(void) {
     BeginRenderRaycast();
     while (!WindowShouldClose()) {
         BeginDrawing();
-        MovePlayer(&player);
-        Raycast(player, rays, hits);
-        Draw3D(textureWidth, textureHeight, player, rays, hits, pixels);
-        
-        UpdateTexture(tex, img.data);
-
-        
-        ClearBackground(BLACK);
-        Draw2D(player, rays, hits);
-        DrawTexturePro(tex, source, dest, origin, 0.0f, WHITE);
-        DrawFPS(5, 5);
+            MovePlayer(&player);
+            Raycast(player, rays, hits);
+            Draw3D(textureWidth, textureHeight, player, rays, hits, pixels);
+            UpdateTexture(tex, img.data);
+            ClearBackground(BLACK);
+            Draw2D(player, rays, hits);
+            DrawTexturePro(tex, source, dest, origin, 0.0f, WHITE);
+            DrawFPS(5, 5);
         EndDrawing();
 
         ImageClearBackground(&img, BLANK);
