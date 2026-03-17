@@ -11,7 +11,7 @@ static const int textureHeight = 600;
 static const int raysCount = textureWidth;
 static const float fov = 50.0f;
 static const int dof = 10;
-static const float wallHeightMultiplier = 0.07f; // "Магическое число" для высоты стен
+static const float wallHeightMultiplier = 1.4f; // "Магическое число" для высоты стен
 
 // Movement
 static const float collisionDistance = 0.5f;

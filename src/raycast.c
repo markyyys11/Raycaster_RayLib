@@ -8,12 +8,14 @@ void InitRays(const Player player, Ray2D rays[raysCount]) {
     float startAngle = (player.angle - fovRad / 2);
 
     for (int i = 0; i < raysCount; ++i) {
-        float factor = (float)i / (raysCount > 1? (float)raysCount : 2.0f - 1.0f);
-        float angle = startAngle + factor * fovRad;
+        float t = (i + 0.5f) / (float)raysCount - 0.5f;
+        float halfWidth = tanf(fovRad * 0.5f);
+        float xOffset = t * 2.0f * halfWidth;
+        float angleOffset = atan2f(xOffset, 1.0f);
 
-        rays[i].angle = angle;
-        rays[i].cosAngle = cosf(angle);
-        rays[i].sinAngle = sinf(angle);
+        rays[i].angle = player.angle + angleOffset;
+        rays[i].cosAngle = cosf(rays[i].angle);
+        rays[i].sinAngle = sinf(rays[i].angle);
     }
 }
 
