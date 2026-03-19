@@ -3,29 +3,30 @@
 #include <string.h>
 #include "resources.h"
 #include "settings.h"
+#include "types.h"
 
-Image atlas;
+Color *atlasData;
+// Image atlas;
 int atlasWidth, atlasHeight;
 int atlasRows, atlasCols;
 
 void LoadResources() {
     char buffer[50];
     snprintf(buffer, sizeof(buffer), "%s/%s", resourcesPath, textureAtlas);
-    atlas = LoadImage(buffer);
+    Image atlas = LoadImage(buffer);
     atlasWidth = atlas.width;
     atlasHeight = atlas.height;
     atlasCols = atlasWidth / textureSize;
     atlasRows = atlasHeight / textureSize;
+    atlasData = calloc(atlasWidth * atlasHeight, sizeof(Color));
+    memcpy(atlasData, (Color *)atlas.data, sizeof(Color) * atlasWidth * atlasHeight) ;
+    UnloadImage(atlas);
 }
 
-void GetTexture(const int index, const int width, const int height, Color *pixels) {
-    if (atlas.data == NULL || pixels == NULL) {
-        fprintf(stderr, "Ошибка: NULL указатель\n");
-        return;
-    }
+Color GetAtlasPixel(const int index, const Vector2Int pixelPos) {
     if (index < 0 || index >= atlasCols * atlasRows) {
         fprintf(stderr, "Ошибка: индекс %d вне диапазона\n", index);
-        return;
+        return RED;
     }
     
     int col = index % atlasCols;
@@ -34,18 +35,6 @@ void GetTexture(const int index, const int width, const int height, Color *pixel
     // Начальные координаты в атласе
     int startX = col * textureSize;
     int startY = row * textureSize;
-    
-    Color *atlasPixels = (Color *)atlas.data;
-    
-    // Копирование построчно
-    for (int y = 0; y < height; y++) {
-        int srcIndex = (startY + y) * atlasWidth + startX;
-        int dstIndex = y * width;
-        
-        memcpy(&pixels[dstIndex], &atlasPixels[srcIndex], width * sizeof(Color));
-    }
-}
 
-void UnloadResources() {
-    UnloadImage(atlas);
+    return atlasData[(startY + pixelPos.y) * atlasWidth + (startX + pixelPos.x)];
 }

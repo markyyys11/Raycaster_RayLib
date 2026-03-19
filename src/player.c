@@ -13,22 +13,22 @@ void MovePlayer(Player *player) {
         leftRightX = moveSpeed * cosf(player->angle + (90 * DEG2RAD)) * deltaTime,
         leftRightY = moveSpeed * sinf(player->angle + (90 * DEG2RAD)) * deltaTime;
 
-    Cell collFront = {
+    Vector2Int collFront = {
         player->position.x + (cosf(player->angle) * collisionDistance),
         player->position.y + (sinf(player->angle) * collisionDistance)
     };
 
-    Cell collBack = {
+    Vector2Int collBack = {
         player->position.x - (cosf(player->angle) * collisionDistance),
         player->position.y - (sinf(player->angle) * collisionDistance)
     };
 
-    Cell collRight = {
+    Vector2Int collRight = {
         player->position.x + (cosf(player->angle + (90 * DEG2RAD)) * collisionDistance),
         player->position.y + (sinf(player->angle + (90 * DEG2RAD)) * collisionDistance)
     };
 
-    Cell collLeft = {
+    Vector2Int collLeft = {
         player->position.x - (cosf(player->angle + (90 * DEG2RAD)) * collisionDistance),
         player->position.y - (sinf(player->angle + (90 * DEG2RAD)) * collisionDistance)
     };

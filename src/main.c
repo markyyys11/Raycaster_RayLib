@@ -25,26 +25,20 @@ int main(void) {
     Vector2 origin = { 0, 0 };
 
     Color *pixels = (Color *)img.data;
-
-    LoadTextureBuffer();
     while (!WindowShouldClose()) {
+        ImageClearBackground(&img, BLACK);
         BeginDrawing();
             MovePlayer(&player);
             Raycast(player, rays, hits);
-            Draw3D(textureWidth, textureHeight, player, rays, hits, pixels);
-            UpdateTexture(tex, img.data);
+            Draw3D(player, rays, hits, pixels);
+            
+            UpdateTexture(tex, pixels);
             // ClearBackground(BLACK);
             // Draw2D(player, rays, hits);
             DrawTexturePro(tex, source, dest, origin, 0.0f, WHITE);
             DrawFPS(5, 5);
         EndDrawing();
-
-        ImageClearBackground(&img, BLACK);
     }
-    UnloadTextureBuffer();
-
-    UnloadResources();
-
     UnloadTexture(tex);
     UnloadImage(img);
     CloseWindow();

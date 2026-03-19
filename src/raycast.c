@@ -94,7 +94,7 @@ void Raycast(const Player player, Ray2D rays[raysCount], RaycastHit hits[raysCou
         verLen = sqrtf(powf(verX - player.position.x, 2) + powf(verY - player.position.y, 2));
 
         Vector2 position = {.x = horLen < verLen ? horX : verX, .y = horLen < verLen ? horY : verY};
-        Cell cell = {.x = (int)position.x, .y = (int)position.y};
+        Vector2Int cell = {.x = (int)position.x, .y = (int)position.y};
 
         float rayLength = horLen < verLen ? horLen : verLen; 
         hits[i].distance = rayLength;       

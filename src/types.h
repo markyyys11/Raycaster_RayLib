@@ -17,13 +17,18 @@ typedef struct {
 typedef struct {
     int x;
     int y;
-} Cell;
+} Vector2Int;
 
 typedef struct {
     bool polar;
     float distance;
-    Cell cell;
+    Vector2Int cell;
     Vector2 position;
 } RaycastHit;
+
+typedef struct {
+    float top;
+    float height;
+} WallRow;
 
 #endif //TYPES_H

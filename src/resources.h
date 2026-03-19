@@ -3,9 +3,9 @@
 
 #include "raylib.h"
 #include "settings.h"
+#include "types.h"
 
 void LoadResources();
-void GetTexture(const int index, const int width, const int height, Color *pixels);
-void UnloadResources();
+Color GetAtlasPixel(const int index, const Vector2Int pixelPos);
 
 #endif // RESOURCES_H
