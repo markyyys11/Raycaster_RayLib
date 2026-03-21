@@ -6,7 +6,6 @@
 #include "types.h"
 
 Color *atlasData;
-// Image atlas;
 int atlasWidth, atlasHeight;
 int atlasRows, atlasCols;
 

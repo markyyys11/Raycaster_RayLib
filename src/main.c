@@ -16,11 +16,11 @@ int main(void) {
     Ray2D rays[raysCount];
     RaycastHit hits[raysCount];
 
-    Image img = GenImageColor(textureWidth, textureHeight, BLANK);
+    Image img = GenImageColor(renderWidth, renderHeight, BLANK);
     ImageFormat(&img, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
     Texture2D tex = LoadTextureFromImage(img);
 
-    Rectangle source = { 0, 0, (float)textureWidth, (float)textureHeight };
+    Rectangle source = { 0, 0, (float)renderWidth, (float)renderHeight };
     Rectangle dest = { 0, 0, (float)screenWidth, (float)screenHeight };
     Vector2 origin = { 0, 0 };
 
