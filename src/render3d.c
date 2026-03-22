@@ -26,72 +26,46 @@ void DrawWall(const int x, const int wallStart, const int wallHeight, const Ray2
     }     
 }
 
-void DrawFloor(const int x, const float verticalFov, const float projPlaneDist, const float worldWallHeight, const Player player, const Ray2D ray, Color *pixels) {
-    for (int y = 1; y < renderHeight / 2; y++) {
-        float tanA = y / projPlaneDist;
-        float rayDir = ray.angle - player.angle;
-        float rayDist = ((worldWallHeight / 2.0f) / tanA) / cosf(rayDir);
-        if (floorf(rayDist) > dof) continue;
-
-        float rayX = player.position.x + rayDist * cosf(ray.angle);
-        float rayY = player.position.y + rayDist * sinf(ray.angle);
-
-        if (rayX < 0 || rayX >= mapWidth) continue; 
-        if (rayY < 0 || rayY >= mapHeight) continue;
-
-        int floorIndex = floors[(int)rayY * mapWidth + (int)rayX];
-        if (floorIndex <= 0) continue;
-
-        int pixelCol = textureSize * (rayX - floorf(rayX));
-        if (pixelCol > textureSize) continue;
-        
-        int pixelRow = textureSize * (rayY - floorf(rayY));
-        if (pixelRow > textureSize) continue;
-
-        Color color = GetAtlasPixel(floorIndex - 1, (Vector2Int){.x = pixelCol, .y = pixelRow});
-        // color = ColorMultiply(color, LIGHTGRAY);
-        pixels[((renderHeight / 2) + y) * renderWidth + x] = color;
-    }
+static void DrawFloorCeilPixel(const int x, const int y, const int pixelCol, const int pixelRow, const int floorIndex, Color *pixels, bool isCeil, Color tint) {
+    Color color = GetAtlasPixel(floorIndex - 1, (Vector2Int){.x = pixelCol, .y = pixelRow});
+    color = ColorMultiply(color, tint);
+    pixels[((renderHeight / 2) + (isCeil ? -y : y)) * renderWidth + x] = color;
 }
 
-void DrawCeil(const int x, const float verticalFov, const float projPlaneDist, const float worldWallHeight, const Player player, const Ray2D ray, Color *pixels) {
-    for (int y = 1; y < renderHeight / 2; y++) {
+void DrawFloorCeil(const int x, const float wallHeight, const float projPlaneDist, const float worldWallHeight, const Player player, const Ray2D ray, Color *pixels) {
+    float rayDir = ray.angle - player.angle;
+    
+    for (int y = wallHeight / 2; y < (renderHeight / 2); y++) {
         float tanA = y / projPlaneDist;
-        float rayDir = ray.angle - player.angle;
         float rayDist = ((worldWallHeight / 2.0f) / tanA) / cosf(rayDir);
         if (floorf(rayDist) > dof) continue;
 
         float rayX = player.position.x + rayDist * cosf(ray.angle);
         float rayY = player.position.y + rayDist * sinf(ray.angle);
 
-        if (rayX < 0 || rayX >= mapWidth) continue; 
+        if (rayX < 0 || rayX >= mapWidth) continue;
         if (rayY < 0 || rayY >= mapHeight) continue;
 
         int floorIndex = floors[(int)rayY * mapWidth + (int)rayX];
         if (floorIndex <= 0) continue;
+        int ceilIndex = ceils[(int)rayY * mapWidth + (int)rayX];
+        if (ceilIndex <= 0) continue;
 
         int pixelCol = textureSize * (rayX - floorf(rayX));
         if (pixelCol > textureSize) continue;
-        
+
         int pixelRow = textureSize * (rayY - floorf(rayY));
         if (pixelRow > textureSize) continue;
 
-        Color color = GetAtlasPixel(floorIndex - 1, (Vector2Int){.x = pixelCol, .y = pixelRow});
-        color = ColorMultiply(color, LIGHTGRAY);
-        pixels[((renderHeight / 2) - y) * renderWidth + x] = color;
+        DrawFloorCeilPixel(x, y, pixelCol, pixelRow, floorIndex, pixels, false, WHITE);
+        DrawFloorCeilPixel(x, y, pixelCol, pixelRow, ceilIndex, pixels, true, LIGHTGRAY);
     }
 }
 
 void Draw3D(const Player player, const Ray2D rays[], const RaycastHit hits[], Color *pixels) {
-    // Vertical FOV
-    
-    float aspectRatio = (float)renderWidth / (float)renderHeight;
-    float verticalFov = 2.0f * atanf(tanf(fov / 2.0f * DEG2RAD) / aspectRatio) * RAD2DEG;
-    
     float worldWallHeight = 1.0f;
 
     // Projection plane distance
-    // float projPlaneDist = (screenHeight / 2.0f) / tanf(verticalFov / 2.0f * DEG2RAD);
     float projPlaneDist = (renderWidth / 2.0f) / tanf(fov / 2.0f * DEG2RAD);
     float textureHalfHeight = renderHeight / 2.0f;
 
@@ -105,8 +79,7 @@ void Draw3D(const Player player, const Ray2D rays[], const RaycastHit hits[], Co
         int wallHeight = roundf((worldWallHeight / rayDist) * projPlaneDist);
         int wallStart = roundf(textureHalfHeight - (wallHeight / 2.0f));
 
-        DrawFloor(i, verticalFov, projPlaneDist, worldWallHeight, player, ray, pixels);
-        DrawCeil(i, verticalFov, projPlaneDist, worldWallHeight, player, ray, pixels);
+        DrawFloorCeil(i, wallHeight, projPlaneDist, worldWallHeight, player, ray, pixels);
         DrawWall(i, wallStart, wallHeight, ray, hit, pixels);
     }
 }

@@ -6,6 +6,7 @@
 #include "render3d.h"
 #include "raycast.h"
 #include "resources.h"
+#include "render_raycast.h"
 
 int main(void) {
     InitWindow(screenWidth, screenHeight, "Raylib Project");
@@ -29,12 +30,8 @@ int main(void) {
         ImageClearBackground(&img, BLACK);
         BeginDrawing();
             MovePlayer(&player);
-            Raycast(player, rays, hits);
-            Draw3D(player, rays, hits, pixels);
-            
+            DrawRaycast(player, pixels);
             UpdateTexture(tex, pixels);
-            // ClearBackground(BLACK);
-            // Draw2D(player, rays, hits);
             DrawTexturePro(tex, source, dest, origin, 0.0f, WHITE);
             DrawFPS(5, 5);
         EndDrawing();
