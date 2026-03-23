@@ -126,32 +126,40 @@ void DrawRaycast(const Player player, Color *pixels) {
         int dofIter = 0;
         while (dofIter < dof) {
             if (ray.sinAngle != 0) {
-                if (horX < 0 || horX > mapWidth || horY < 0 || horY > mapHeight) break;
-                if (walls[(int)(horY) * mapWidth + (int)(horX)] > 0) break;
-
-                horX += deltaHorX;
-                horY += deltaHorY;
+                if (horX > 0 && horX < mapWidth && horY > 0 && horY < mapHeight) {
+                    if (walls[(int)(horY) * mapWidth + (int)(horX)] <= 0) {
+                        horX += deltaHorX;
+                        horY += deltaHorY;
+                    } else horCollided = true;
+                }
             }
 
-            dofIter += 1;
-        }
-         
-        dofIter = 0;
-        while (dofIter < dof) {
-            if (ray.cosAngle == 0)  break;
-            if (verX < 0 || verX > mapWidth || verY < 0 || verY > mapHeight) break;
-            if (walls[(int)(verY) * mapWidth + (int)(verX)] > 0) break;
+            if (ray.cosAngle != 0) {
+                if (verX > 0 && verX < mapWidth && verY > 0 && verY < mapHeight) {
+                    if (walls[(int)(verY) * mapWidth + (int)(verX)] <= 0) {
+                        verX += deltaVerX;
+                        verY += deltaVerY;
+                    } else verCollider = true;
+                }
+            }
 
-            verX += deltaVerX;
-            verY += deltaVerY;
 
             dofIter += 1;
         }
 
         float horLen = 9999, verLen = 9999;
-        horLen = sqrtf(powf(horX - player.position.x, 2) + powf(horY - player.position.y, 2)); 
-        verLen = sqrtf(powf(verX - player.position.x, 2) + powf(verY - player.position.y, 2));
+        if (horCollided) {
+            float horDX = horX - player.position.x,
+                horDY = horY - player.position.y;
+            horLen = sqrtf(horDX * horDX + horDY * horDY); 
+        }
 
+        if (verCollider) {
+            float verDX = verX - player.position.x,
+                verDY = verY - player.position.y;
+            verLen = sqrtf(verDX * verDX + verDY * verDY);
+        }
+        
         Vector2 position = {.x = horLen < verLen ? horX : verX, .y = horLen < verLen ? horY : verY};
         Vector2Int cell = {.x = (int)position.x, .y = (int)position.y};
 

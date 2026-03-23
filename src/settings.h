@@ -12,13 +12,13 @@ static const int screenHeight = 1080;
 static const int renderWidth = 1200;
 static const int renderHeight = 675;
 static const int raysCount = renderWidth;
-static const float fov = 120.0f;
+static const float fov = 100.0f;
 static const int dof = 10;
 
 // Movement
 static const float collisionDistance = 0.5f;
-static const float cameraSpeed = 0.5f;
-static const float moveSpeed = 0.5f;
+static const float cameraSpeed = 1.0f;
+static const float moveSpeed = 1.0f;
 
 // Resources
 static const char *resourcesPath = "resources";
