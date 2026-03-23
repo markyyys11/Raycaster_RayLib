@@ -6,6 +6,8 @@
             "label": "C/C++: gcc.exe build active file",
             "command": "gcc",
             "args": [
+                "-O3",
+                "-ffast-math",
                 "-g",
                 "${workspaceFolder}//src//*.c",
                 "-o",

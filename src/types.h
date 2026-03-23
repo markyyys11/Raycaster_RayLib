@@ -11,6 +11,7 @@ typedef struct {
 typedef struct {
     float cosAngle;
     float sinAngle;
+    float tanAngle;
     float angle;
 } Ray2D;
 

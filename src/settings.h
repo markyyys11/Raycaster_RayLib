@@ -9,11 +9,11 @@ static const int screenWidth = 1920;
 static const int screenHeight = 1080;
 
 // Render
-static const int renderWidth = 800;
-static const int renderHeight = 450;
+static const int renderWidth = 1200;
+static const int renderHeight = 675;
 static const int raysCount = renderWidth;
-static const float fov = 90.0f;
-static const int dof = 8;
+static const float fov = 120.0f;
+static const int dof = 10;
 
 // Movement
 static const float collisionDistance = 0.5f;
