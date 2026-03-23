@@ -3,28 +3,59 @@
 #include "types.h"
 #include "player.h"
 #include "settings.h"
+#include "map.h"
 
-Player player = { .position = { 400.0f, 300.0f }, .cameraDegree = 0.0f };
+void MovePlayer(Player *player) {
+    float deltaTime = GetFrameTime();
 
-void MovePlayer(void) {
+    float upDownX = moveSpeed * cosf(player->angle) * deltaTime,
+        upDownY = moveSpeed * sinf(player->angle) * deltaTime,
+        leftRightX = moveSpeed * cosf(player->angle + (90 * DEG2RAD)) * deltaTime,
+        leftRightY = moveSpeed * sinf(player->angle + (90 * DEG2RAD)) * deltaTime;
+
+    Vector2Int collFront = {
+        player->position.x + (cosf(player->angle) * collisionDistance),
+        player->position.y + (sinf(player->angle) * collisionDistance)
+    };
+
+    Vector2Int collBack = {
+        player->position.x - (cosf(player->angle) * collisionDistance),
+        player->position.y - (sinf(player->angle) * collisionDistance)
+    };
+
+    Vector2Int collRight = {
+        player->position.x + (cosf(player->angle + (90 * DEG2RAD)) * collisionDistance),
+        player->position.y + (sinf(player->angle + (90 * DEG2RAD)) * collisionDistance)
+    };
+
+    Vector2Int collLeft = {
+        player->position.x - (cosf(player->angle + (90 * DEG2RAD)) * collisionDistance),
+        player->position.y - (sinf(player->angle + (90 * DEG2RAD)) * collisionDistance)
+    };
+
     if (IsKeyDown(KEY_W)) {
-        player.position.x += moveSpeed * cosf(player.cameraDegree * DEG2RAD);
-        player.position.y += moveSpeed * sinf(player.cameraDegree * DEG2RAD);
-    }
-    else if (IsKeyDown(KEY_S)) {
-        player.position.x -= moveSpeed * cosf(player.cameraDegree * DEG2RAD);
-        player.position.y -= moveSpeed * sinf(player.cameraDegree * DEG2RAD);
+        player->position.x += upDownX;
+        player->position.y += upDownY;
+    } else if (IsKeyDown(KEY_S)) {
+        player->position.x -= upDownX;
+        player->position.y -= upDownY;
     }
 
     if (IsKeyDown(KEY_D)) {
-        player.position.x += moveSpeed * cosf((player.cameraDegree + 90) * DEG2RAD);
-        player.position.y += moveSpeed * sinf((player.cameraDegree + 90) * DEG2RAD);
-    }
-    else if (IsKeyDown(KEY_A)) {
-        player.position.x -= moveSpeed * cosf((player.cameraDegree + 90) * DEG2RAD);
-        player.position.y -= moveSpeed * sinf((player.cameraDegree + 90) * DEG2RAD);
+        player->position.x += leftRightX;
+        player->position.y += leftRightY;
+    } else if (IsKeyDown(KEY_A)) {
+        player->position.x -= leftRightX;
+        player->position.y -= leftRightY;
     }
 
-    if (IsKeyDown(KEY_RIGHT)) player.cameraDegree += cameraSpeed;
-    else if (IsKeyDown(KEY_LEFT)) player.cameraDegree -= cameraSpeed;
+    DrawCircle(player->position.x * tileSize, player->position.y * tileSize, 5, RED);
+    
+
+    // DrawCircle(collPointFront.x * tileSize, collPointFront.y * tileSize, 5, RED);
+
+    if (IsKeyDown(KEY_RIGHT)) player->angle += cameraSpeed * deltaTime;
+    else if (IsKeyDown(KEY_LEFT)) player->angle -= cameraSpeed * deltaTime;
 }
+
+

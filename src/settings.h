@@ -1,11 +1,28 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-static const int screenWidth = 800;
-static const int screenHeight = 600;
-static const int raysCount = 100;
+#include "raylib.h"
+#include "math.h"
 
-static const float cameraSpeed = 0.02f;
-static const float moveSpeed = 0.02f;
+// Screen
+static const int screenWidth = 1920;
+static const int screenHeight = 1080;
+
+// Render
+static const int renderWidth = 1200;
+static const int renderHeight = 675;
+static const int raysCount = renderWidth;
+static const float fov = 120.0f;
+static const int dof = 10;
+
+// Movement
+static const float collisionDistance = 0.5f;
+static const float cameraSpeed = 0.5f;
+static const float moveSpeed = 0.5f;
+
+// Resources
+static const char *resourcesPath = "resources";
+static const char *textureAtlas = "atlas.png";
+static const int textureSize = 16;
 
 #endif // SETTINGS_H

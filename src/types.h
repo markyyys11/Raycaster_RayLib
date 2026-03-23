@@ -5,18 +5,31 @@
 
 typedef struct {
     Vector2 position;
-    float cameraDegree;
+    float angle;
 } Player;
 
 typedef struct {
-    Vector2 start;
-    Vector2 end;
-} Wall;
+    float cosAngle;
+    float sinAngle;
+    float tanAngle;
+    float angle;
+} Ray2D;
 
 typedef struct {
-    Vector2 direction;
-    float angle;
-    float angleDiff;
-} PlayerRay;
+    int x;
+    int y;
+} Vector2Int;
+
+typedef struct {
+    bool polar;
+    float distance;
+    Vector2Int cell;
+    Vector2 position;
+} RaycastHit;
+
+typedef struct {
+    float top;
+    float height;
+} WallRow;
 
 #endif //TYPES_H
