@@ -49,7 +49,10 @@ void MovePlayer(Player *player) {
         player->position.y -= leftRightY;
     }
 
-    DrawCircle(player->position.x * tileSize, player->position.y * tileSize, 5, RED);
+    if (IsKeyDown(KEY_SPACE)) player->position.z += moveSpeed * deltaTime;
+    else if (IsKeyDown(KEY_LEFT_CONTROL)) player->position.z -= moveSpeed * deltaTime;
+
+    // DrawCircle(player->position.x * tileSize, player->position.y * tileSize, 5, RED);
     
 
     // DrawCircle(collPointFront.x * tileSize, collPointFront.y * tileSize, 5, RED);

@@ -4,7 +4,7 @@
 #include "raylib.h"
 
 typedef struct {
-    Vector2 position;
+    Vector3 position;
     float angle;
 } Player;
 

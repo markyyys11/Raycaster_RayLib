@@ -65,7 +65,7 @@ void DrawFloorCeil2(const int x, const float wallHeight, const float projPlaneDi
 void DrawRaycast(const Player player, Color *pixels) {
     // Projection plane distance
     float projPlaneDist = (renderWidth / 2.0f) / tanf(fov / 2.0f * DEG2RAD);
-    float textureHalfHeight = renderHeight / 2.0f;
+    float renderVertCenter = renderHeight / 2.0f;
 
     float fovRad = fov * DEG2RAD;
     float startAngle = (player.angle - fovRad / 2);
@@ -173,10 +173,15 @@ void DrawRaycast(const Player player, Color *pixels) {
         float rayDir = ray.angle - player.angle;
         float rayDist = cosf(rayDir) * hit.distance;
 
-        int wallHeight = (int)((worldWallHeight / rayDist) * projPlaneDist);
-        int wallStart = (int)(textureHalfHeight - (wallHeight / 2.0f));
+        // int wallProjHeight = (int)((worldWallHeight / rayDist) * projPlaneDist);
+        int wallProjHeight = (int)(projPlaneDist / (rayDist / worldWallHeight));
+        int projVerticalDelta = (int)(projPlaneDist / (rayDist / player.position.z));
+        // float halfWall = wallHeight / 2.0f;
+        // float wallStartDelta = player.position.z - halfWall; Подходит для вертикалього поворота камеры
 
-        DrawFloorCeil2(i, wallHeight, projPlaneDist, worldWallHeight, player, ray, pixels);
-        DrawWall2(i, wallStart, wallHeight, ray, hit, pixels);
+        int wallStart = (int)(renderVertCenter + projVerticalDelta - wallProjHeight / 2);
+
+        DrawFloorCeil2(i, wallProjHeight, projPlaneDist, worldWallHeight, player, ray, pixels);
+        DrawWall2(i, wallStart, wallProjHeight, ray, hit, pixels);
     }
 }

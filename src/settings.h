@@ -5,8 +5,8 @@
 #include "math.h"
 
 // Screen
-static const int screenWidth = 1920;
-static const int screenHeight = 1080;
+static const int screenWidth = 1600;
+static const int screenHeight = 900;
 
 // Render
 static const int renderWidth = 1200;
