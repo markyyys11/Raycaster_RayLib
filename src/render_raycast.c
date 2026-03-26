@@ -12,7 +12,7 @@
 const float worldWallHeight = 1.0f;
 const float halfWallHeight = worldWallHeight / 2.0f;
 
-void DrawWall2(const int x, const int wallStart, const int wallHeight, const Ray2D ray, const RaycastHit hit, Color *pixels) {
+void DrawWall2(const int x, const int wallStart, const int wallHeight, const RaycastHit hit, Color *pixels) {
     int wall = walls[hit.cell.y * mapWidth + hit.cell.x];
     if (wall <= 0) return;
 
@@ -63,82 +63,57 @@ void DrawFloorCeil2(const int x, const float wallHeight, const float projPlaneDi
 }
 
 void DrawRaycast(const Player player, Color *pixels) {
+    float pX = player.position.x, pY = player.position.y;
+
     // Projection plane distance
     float projPlaneDist = (renderWidth / 2.0f) / tanf(fov / 2.0f * DEG2RAD);
     float renderVertCenter = renderHeight / 2.0f;
+
 
     float fovRad = fov * DEG2RAD;
     float startAngle = (player.angle - fovRad / 2);
     float halfWidth = tanf(fovRad * 0.5f);
 
     for (int i = 0; i < raysCount; i++) {
-        float t = (i + 0.5f) / (float)raysCount - 0.5f;
-        float xOffset = t * 2.0f * halfWidth;
-        float angleOffset = atan2f(xOffset, 1.0f);
+        // Ray angles
+        float rN = (i + 0.5f) / (float)raysCount - 0.5f;
+        float xO = rN * 2.0f * halfWidth;
+        float rayDeltaAngle = atan2f(xO, 1.0f), rayAngle = player.angle + rayDeltaAngle;
+        float rayCos = cosf(rayAngle), raySin = sinf(rayAngle), rayTan = tanf(rayAngle);
 
-        Ray2D ray;// = rays[i];
-        ray.angle = player.angle + angleOffset;
-        ray.cosAngle = cosf(ray.angle);
-        ray.sinAngle = sinf(ray.angle);
-        ray.tanAngle = tanf(ray.angle);
+        // Horizontal ray start
+        float hX = 9999, hY = 9999, dHY = 0, dHX = 0;
+        if (raySin > 0) { hY = (int)(pY + 1) - pY; hX = hY / rayTan; dHY = 1; }
+        else if (raySin < 0) { hY = -((pY - (int)pY) + 0.00001f); hX = hY / rayTan; dHY = -1; }
+        dHX = dHY / rayTan; hY = pY + hY; hX = pX + hX;
 
-        float horX = 0, horY = 0, deltaHorY = 0, deltaHorX = 0;
-        
-        if (ray.sinAngle > 0) {
-            horY = (int)(player.position.y + 1) - player.position.y;
-            horX = horY / ray.tanAngle;
-            deltaHorY = 1;
+        // Vertical ray start
+        float vX = 9999, vY = 9999, dVY = 0, dVX = 0;
+        if (rayCos > 0) { vX = (int)(pX + 1) - pX; vY = vX * rayTan; dVX = 1; } 
+        else if (rayCos < 0) { vX = -((pX - (int)pX) + 0.00001f); vY = vX * rayTan; dVX = -1; }     
+        dVY = dVX * rayTan; vX = pX + vX; vY = pY + vY;
+
+        float hCD = 9999, vCD = 9999;
+        for (int i = 0; i < dof; i++) {
+            
         }
-        else if (ray.sinAngle < 0) {
-            horY = -((player.position.y - (int)(player.position.y)) + 0.00001f);
-            horX = horY / ray.tanAngle;
-            deltaHorY = -1;
-        } else {
-            horY = 9999;
-            horX = 9999;
-        }
-
-        deltaHorX = deltaHorY / ray.tanAngle;
-        horY = player.position.y + horY;
-        horX = player.position.x + horX; 
-
-        float verX = 0, verY = 0, deltaVerY = 0, deltaVerX = 0;
-
-        if (ray.cosAngle > 0) {
-            verX = (int)(player.position.x + 1) - player.position.x;
-            verY = verX * ray.tanAngle;
-            deltaVerX = 1; 
-        } else if (ray.cosAngle < 0) {
-            verX = -((player.position.x - (int)(player.position.x)) + 0.00001f);
-            verY = verX * ray.tanAngle;
-            deltaVerX = -1;
-        } else {
-            verX = 9999; 
-            verY = 9999; 
-        }
-
-        deltaVerY = deltaVerX * ray.tanAngle;
-        verX = player.position.x + verX;
-        verY = player.position.y + verY;
 
         bool horCollided = false, verCollider = false;
-
         int dofIter = 0;
         while (dofIter < dof) {
-            if (ray.sinAngle != 0) {
-                if (horX > 0 && horX < mapWidth && horY > 0 && horY < mapHeight) {
-                    if (walls[(int)(horY) * mapWidth + (int)(horX)] <= 0) {
-                        horX += deltaHorX;
-                        horY += deltaHorY;
+            if (raySin != 0) {
+                if (hX > 0 && hX < mapWidth && hY > 0 && hY < mapHeight) {
+                    if (walls[(int)(hY) * mapWidth + (int)(hX)] <= 0) {
+                        hX += dHX; hY += dHY;
                     } else horCollided = true;
                 }
             }
 
-            if (ray.cosAngle != 0) {
-                if (verX > 0 && verX < mapWidth && verY > 0 && verY < mapHeight) {
-                    if (walls[(int)(verY) * mapWidth + (int)(verX)] <= 0) {
-                        verX += deltaVerX;
-                        verY += deltaVerY;
+            if (rayCos != 0) {
+                if (vX > 0 && vX < mapWidth && vY > 0 && vY < mapHeight) {
+                    if (walls[(int)(vY) * mapWidth + (int)(vX)] <= 0) {
+                        vX += dVX;
+                        vY += dVY;
                     } else verCollider = true;
                 }
             }
@@ -149,29 +124,29 @@ void DrawRaycast(const Player player, Color *pixels) {
 
         float horLen = 9999, verLen = 9999;
         if (horCollided) {
-            float horDX = horX - player.position.x,
-                horDY = horY - player.position.y;
-            horLen = sqrtf(horDX * horDX + horDY * horDY); 
+            float horDX = hX - pX,
+                horDY = hY - pY;
+            horLen = horDX * horDX + horDY * horDY; 
         }
 
         if (verCollider) {
-            float verDX = verX - player.position.x,
-                verDY = verY - player.position.y;
-            verLen = sqrtf(verDX * verDX + verDY * verDY);
+            float verDX = vX - pX,
+                verDY = vY - pY;
+            verLen = verDX * verDX + verDY * verDY;
         }
         
-        Vector2 position = {.x = horLen < verLen ? horX : verX, .y = horLen < verLen ? horY : verY};
+        Vector2 position = {.x = horLen < verLen ? hX : vX, .y = horLen < verLen ? hY : vY};
         Vector2Int cell = {.x = (int)position.x, .y = (int)position.y};
 
-        float rayLength = horLen < verLen ? horLen : verLen; 
+        float rayLength = horLen < verLen ? sqrtf(horLen) : sqrtf(verLen); 
         RaycastHit hit;
         hit.distance = rayLength;       
         hit.cell = cell;
         hit.position = position;
         hit.polar = horLen < verLen ? true : false;
 
-        float rayDir = ray.angle - player.angle;
-        float rayDist = cosf(rayDir) * hit.distance;
+        // float rayDir = rayDeltaAngle;
+        float rayDist = cosf(rayDeltaAngle) * hit.distance;
 
         // int wallProjHeight = (int)((worldWallHeight / rayDist) * projPlaneDist);
         int wallProjHeight = (int)(projPlaneDist / (rayDist / worldWallHeight));
@@ -181,7 +156,7 @@ void DrawRaycast(const Player player, Color *pixels) {
 
         int wallStart = (int)(renderVertCenter + projVerticalDelta - wallProjHeight / 2);
 
-        DrawFloorCeil2(i, wallProjHeight, projPlaneDist, worldWallHeight, player, ray, pixels);
-        DrawWall2(i, wallStart, wallProjHeight, ray, hit, pixels);
+        // DrawFloorCeil2(i, wallProjHeight, projPlaneDist, worldWallHeight, player, ray, pixels);
+        DrawWall2(i, wallStart, wallProjHeight, hit, pixels);
     }
 }
