@@ -9,8 +9,7 @@
 #include "utils.h"
 #include "resources.h"
 
-const float worldWallHeight = 1.0f;
-const float halfWallHeight = worldWallHeight / 2.0f;
+typedef enum {n, e, s, w} Polar;
 
 void DrawWall2(const int x, const int wallStart, const int wallHeight, const RaycastHit hit, Color *pixels) {
     int wall = walls[hit.cell.y * mapWidth + hit.cell.x];
@@ -27,6 +26,24 @@ void DrawWall2(const int x, const int wallStart, const int wallHeight, const Ray
         color = ColorMultiply(color, hit.polar ? LIGHTGRAY : GRAY);
         pixels[(y + wallStart) * renderWidth + x] = color;
     }     
+}
+
+static void DrawWall3(const int rayInd, const int wallProjTop, const int wallProjBot, const int prevWallProjTop, const int prevWallProjBot, const bool pol, const float posX, const float posY, Color *pixels) {
+    int wI = walls[(int)posY * mapWidth + (int)posX];
+    if (wI <= 0) return;
+
+    int pC = pol ? (posX - (int)posX) * textureSize : (posY - (int)posY) * textureSize;
+    int wH = wallProjBot - wallProjTop;
+    for (int y = 0; y < wH; ++y) {
+        int pY = y + wallProjBot;
+        // if (prevWallProjTop > pY && pY > prevWallProjBot) continue;
+        if (pY < 0 || pY >= renderHeight) continue;
+
+        int pR = (int)((y * textureSize) / wH);
+        Color color = GetAtlasPixel(wI - 1, (Vector2Int){.x = pC, .y = pR});
+        color = ColorMultiply(color, (pol == n || pol == s) ? LIGHTGRAY : GRAY);
+        pixels[pY * renderWidth + rayInd] = color;
+    }
 }
 
 static void DrawFloorCeilPixel2(const int x, const int y, const int pixelCol, const int pixelRow, const int floorIndex, Color *pixels, bool isCeil, Color tint) {
@@ -94,69 +111,64 @@ void DrawRaycast(const Player player, Color *pixels) {
         dVY = dVX * rayTan; vX = pX + vX; vY = pY + vY;
 
         float hCD = 9999, vCD = 9999;
-        for (int i = 0; i < dof; i++) {
-            
-        }
+        float horLen = 9999, verLen = 9999;
+        float minLen = 9999, prevMinLen; 
+        float maxLen = 9999, prevMaxLen; 
+        float minX = 0, minY = 0;
+        bool polar = false;
 
-        bool horCollided = false, verCollider = false;
-        int dofIter = 0;
-        while (dofIter < dof) {
+        int prevWallProjTop = 0, prevWallProjBot = 0;
+        int wallProjStart = 0, wallProjEnd = 0;
+        for (int j = 0; j < dof; j++) {
+
             if (raySin != 0) {
-                if (hX > 0 && hX < mapWidth && hY > 0 && hY < mapHeight) {
-                    if (walls[(int)(hY) * mapWidth + (int)(hX)] <= 0) {
-                        hX += dHX; hY += dHY;
-                    } else horCollided = true;
-                }
+                if (hX >= 0 && hX < mapWidth && hY >= 0 && hY < mapHeight) {
+                    if (walls[(int)hY * mapWidth + (int)hX] > 0) {
+                        horLen = (hX - pX) * (hX - pX) + (hY - pY) * (hY - pY); 
+                        if (horLen < minLen) {
+                            minLen = horLen; minX = hX; minY = hY;
+                            polar = true;
+                        }
+                    }
+
+                    hX += dHX; hY += dHY;
+                } 
             }
 
             if (rayCos != 0) {
-                if (vX > 0 && vX < mapWidth && vY > 0 && vY < mapHeight) {
-                    if (walls[(int)(vY) * mapWidth + (int)(vX)] <= 0) {
-                        vX += dVX;
-                        vY += dVY;
-                    } else verCollider = true;
+                if (vX >= 0 && vX < mapWidth && vY >= 0 && vY < mapHeight) {
+                    if (walls[(int)vY * mapWidth + (int)vX] > 0) {
+                        verLen = (vX - pX) * (vX - pX) + (vY - pY) * (vY - pY);
+                        if (verLen < minLen) {
+                            minLen = verLen; minX = vX; minY = vY;
+                            polar = false;
+                        }
+                    }
+
+                    vX += dVX; vY += dVY;
                 }
             }
-
-
-            dofIter += 1;
         }
 
-        float horLen = 9999, verLen = 9999;
-        if (horCollided) {
-            float horDX = hX - pX,
-                horDY = hY - pY;
-            horLen = horDX * horDX + horDY * horDY; 
-        }
+        minLen = sqrtf(minLen);
+        if (minLen > dof) continue;
 
-        if (verCollider) {
-            float verDX = vX - pX,
-                verDY = vY - pY;
-            verLen = verDX * verDX + verDY * verDY;
-        }
-        
-        Vector2 position = {.x = horLen < verLen ? hX : vX, .y = horLen < verLen ? hY : vY};
-        Vector2Int cell = {.x = (int)position.x, .y = (int)position.y};
+        float rayDist = cosf(rayDeltaAngle) * minLen;
 
-        float rayLength = horLen < verLen ? sqrtf(horLen) : sqrtf(verLen); 
-        RaycastHit hit;
-        hit.distance = rayLength;       
-        hit.cell = cell;
-        hit.position = position;
-        hit.polar = horLen < verLen ? true : false;
+        float worldWallHeight = wallHeights[(int)minY * mapWidth + (int)minX];
+        float halfWallHeight = worldWallHeight / 2.0f;
 
-        // float rayDir = rayDeltaAngle;
-        float rayDist = cosf(rayDeltaAngle) * hit.distance;
-
-        // int wallProjHeight = (int)((worldWallHeight / rayDist) * projPlaneDist);
         int wallProjHeight = (int)(projPlaneDist / (rayDist / worldWallHeight));
+        int unitProjHeight = (int)(projPlaneDist / rayDist);
         int projVerticalDelta = (int)(projPlaneDist / (rayDist / player.position.z));
-        // float halfWall = wallHeight / 2.0f;
         // float wallStartDelta = player.position.z - halfWall; Подходит для вертикалього поворота камеры
 
-        int wallStart = (int)(renderVertCenter + projVerticalDelta - wallProjHeight / 2);
+        prevWallProjTop = wallProjStart; prevWallProjBot = wallProjEnd;
+        wallProjEnd = (renderHeight / 2) - (unitProjHeight / 2) + projVerticalDelta;
+        wallProjStart = (int)(wallProjEnd - wallProjHeight);
+        // wallProjEnd = wallProjStart + wallProjHeight;
 
         // DrawFloorCeil2(i, wallProjHeight, projPlaneDist, worldWallHeight, player, ray, pixels);
-        DrawWall2(i, wallStart, wallProjHeight, hit, pixels);
+        DrawWall3(i, wallProjStart, wallProjEnd, prevWallProjTop, prevWallProjBot, polar, minX, minY, pixels);
     }
 }
