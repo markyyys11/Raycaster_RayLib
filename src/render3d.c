@@ -10,20 +10,20 @@
 #include "resources.h"
 
 void DrawWall(const int x, const int wallStart, const int wallHeight, const Ray2D ray, const RaycastHit hit, Color *pixels) {
-    int wall = walls[hit.cell.y * mapWidth + hit.cell.x];
-    if (wall <= 0) return;
+    // int wall = walls[hit.cell.y * mapWidth + hit.cell.x];
+    // if (wall <= 0) return;
 
-    int pixelCol = 0;
-    if (hit.polar) pixelCol = (int)(hit.position.x * textureSize) - (int)(hit.cell.x * textureSize);
-    else if (!hit.polar) pixelCol = (int)(hit.position.y * textureSize) - (int)(hit.cell.y * textureSize);
+    // int pixelCol = 0;
+    // if (hit.polar) pixelCol = (int)(hit.position.x * textureSize) - (int)(hit.cell.x * textureSize);
+    // else if (!hit.polar) pixelCol = (int)(hit.position.y * textureSize) - (int)(hit.cell.y * textureSize);
 
-    for (int y = 0; y < wallHeight; ++y) {
-        if (y + wallStart < 0 || y + wallStart >= renderHeight) continue;
-        int pixelRow = roundf((y * textureSize) / wallHeight);
-        Color color = GetAtlasPixel(wall - 1, (Vector2Int){.x = pixelCol, .y = pixelRow});
-        color = ColorMultiply(color, hit.polar ? LIGHTGRAY : GRAY);
-        pixels[(y + wallStart) * renderWidth + x] = color;
-    }     
+    // for (int y = 0; y < wallHeight; ++y) {
+    //     if (y + wallStart < 0 || y + wallStart >= renderHeight) continue;
+    //     int pixelRow = roundf((y * textureSize) / wallHeight);
+    //     Color color = GetAtlasPixel(wall - 1, (Vector2Int){.x = pixelCol, .y = pixelRow});
+    //     color = ColorMultiply(color, hit.polar ? LIGHTGRAY : GRAY);
+    //     pixels[(y + wallStart) * renderWidth + x] = color;
+    // }     
 }
 
 static void DrawFloorCeilPixel(const int x, const int y, const int pixelCol, const int pixelRow, const int floorIndex, Color *pixels, bool isCeil, Color tint) {

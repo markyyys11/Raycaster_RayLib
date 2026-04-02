@@ -98,7 +98,7 @@ void Raycast(const Player player, Ray2D rays[raysCount], RaycastHit hits[raysCou
 
         float rayLength = horLen < verLen ? horLen : verLen; 
         hits[i].distance = rayLength;       
-        hits[i].cell = cell;
+        // hits[i].cell = cell;
         hits[i].position = position;
         hits[i].polar = horLen < verLen ? true : false;
     }   

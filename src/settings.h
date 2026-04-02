@@ -13,7 +13,7 @@ static const int renderWidth = 1200;
 static const int renderHeight = 675;
 static const int raysCount = renderWidth;
 static const float fov = 100.0f;
-static const int dof = 10;
+static const float dof = 3;
 
 // Movement
 static const float collisionDistance = 0.5f;

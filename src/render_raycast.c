@@ -11,22 +11,22 @@
 
 typedef enum {n, e, s, w} Polar;
 
-void DrawWall2(const int x, const int wallStart, const int wallHeight, const RaycastHit hit, Color *pixels) {
-    int wall = walls[hit.cell.y * mapWidth + hit.cell.x];
-    if (wall <= 0) return;
+// void DrawWall2(const int x, const int wallStart, const int wallHeight, const RaycastHit hit, Color *pixels) {
+//     int wall = walls[hit.cell.y * mapWidth + hit.cell.x];
+//     if (wall <= 0) return;
 
-    int pixelCol = 0;
-    if (hit.polar) pixelCol = (int)(hit.position.x * textureSize) - (int)(hit.cell.x * textureSize);
-    else if (!hit.polar) pixelCol = (int)(hit.position.y * textureSize) - (int)(hit.cell.y * textureSize);
+//     int pixelCol = 0;
+//     if (hit.polar) pixelCol = (int)(hit.position.x * textureSize) - (int)(hit.cell.x * textureSize);
+//     else if (!hit.polar) pixelCol = (int)(hit.position.y * textureSize) - (int)(hit.cell.y * textureSize);
 
-    for (int y = 0; y < wallHeight; ++y) {
-        if (y + wallStart < 0 || y + wallStart >= renderHeight) continue;
-        int pixelRow = (int)((y * textureSize) / wallHeight);
-        Color color = GetAtlasPixel(wall - 1, (Vector2Int){.x = pixelCol, .y = pixelRow});
-        color = ColorMultiply(color, hit.polar ? LIGHTGRAY : GRAY);
-        pixels[(y + wallStart) * renderWidth + x] = color;
-    }     
-}
+//     for (int y = 0; y < wallHeight; ++y) {
+//         if (y + wallStart < 0 || y + wallStart >= renderHeight) continue;
+//         int pixelRow = (int)((y * textureSize) / wallHeight);
+//         Color color = GetAtlasPixel(wall - 1, (Vector2Int){.x = pixelCol, .y = pixelRow});
+//         color = ColorMultiply(color, hit.polar ? LIGHTGRAY : GRAY);
+//         pixels[(y + wallStart) * renderWidth + x] = color;
+//     }     
+// }
 
 static void DrawWall3(const int rayInd, const int wallProjTop, const int wallProjBot, const int prevWallProjTop, const int prevWallProjBot, const bool pol, const float posX, const float posY, Color *pixels) {
     int wI = walls[(int)posY * mapWidth + (int)posX];
@@ -92,6 +92,7 @@ void DrawRaycast(const Player player, Color *pixels) {
     float halfWidth = tanf(fovRad * 0.5f);
 
     for (int i = 0; i < raysCount; i++) {
+        RaycastHit **hits = calloc(dof * 2, sizeof(RaycastHit));
         // Ray angles
         float rN = (i + 0.5f) / (float)raysCount - 0.5f;
         float xO = rN * 2.0f * halfWidth;
@@ -125,6 +126,22 @@ void DrawRaycast(const Player player, Color *pixels) {
                 if (hX >= 0 && hX < mapWidth && hY >= 0 && hY < mapHeight) {
                     if (walls[(int)hY * mapWidth + (int)hX] > 0) {
                         horLen = (hX - pX) * (hX - pX) + (hY - pY) * (hY - pY); 
+                        for (int h = 0; h < (int)dof * 2; ++h) {
+                            if (hits[h] == NULL) {
+                                hits[h] = malloc(sizeof(RaycastHit));
+                                hits[h]->distance = horLen;
+                                hits[h]->position.x = hX; hits[h]->position.y = hY;
+                                hits[h]->polar = true;
+                            } else if (hits[h]->distance < horLen) continue;
+                            else if (hits[h]->distance > horLen) {
+                                RaycastHit temp = *hits[h];
+                                hits[h] = malloc(sizeof(RaycastHit));
+                                hits[h]->distance = horLen;
+                                hits[h]->position.x = hX; hits[h]->position.y = hY;
+                                hits[h]->polar = true;
+                            }
+                        }
+                        
                         if (horLen < minLen) {
                             minLen = horLen; minX = hX; minY = hY;
                             polar = true;
@@ -155,7 +172,7 @@ void DrawRaycast(const Player player, Color *pixels) {
 
         float rayDist = cosf(rayDeltaAngle) * minLen;
 
-        float worldWallHeight = wallHeights[(int)minY * mapWidth + (int)minX];
+        float worldWallHeight = 1.0f;//wallHeights[(int)minY * mapWidth + (int)minX];
         float halfWallHeight = worldWallHeight / 2.0f;
 
         int wallProjHeight = (int)(projPlaneDist / (rayDist / worldWallHeight));
@@ -170,5 +187,7 @@ void DrawRaycast(const Player player, Color *pixels) {
 
         // DrawFloorCeil2(i, wallProjHeight, projPlaneDist, worldWallHeight, player, ray, pixels);
         DrawWall3(i, wallProjStart, wallProjEnd, prevWallProjTop, prevWallProjBot, polar, minX, minY, pixels);
+
+        free(hits);
     }
 }
