@@ -127,19 +127,16 @@ void DrawRaycast(const Player player, Color *pixels) {
                     if (walls[(int)hY * mapWidth + (int)hX] > 0) {
                         horLen = (hX - pX) * (hX - pX) + (hY - pY) * (hY - pY); 
                         for (int h = 0; h < (int)dof * 2; ++h) {
-                            if (hits[h] == NULL) {
-                                hits[h] = malloc(sizeof(RaycastHit));
-                                hits[h]->distance = horLen;
-                                hits[h]->position.x = hX; hits[h]->position.y = hY;
-                                hits[h]->polar = true;
-                            } else if (hits[h]->distance < horLen) continue;
-                            else if (hits[h]->distance > horLen) {
-                                RaycastHit temp = *hits[h];
-                                hits[h] = malloc(sizeof(RaycastHit));
-                                hits[h]->distance = horLen;
-                                hits[h]->position.x = hX; hits[h]->position.y = hY;
-                                hits[h]->polar = true;
+                            if (hits[h] != NULL) {
+                                if (hits[h]->distance <= horLen) continue;
+                                else {
+                                    RaycastHit temp = *hits[h];
+                                    hits[h + 1] = &temp;
+                                }
                             }
+                            RaycastHit new = { .distance = horLen, .position = { .x = hX, .y = hY }, .polar = true };
+                            hits[h] = &new;
+                            break;
                         }
                         
                         if (horLen < minLen) {
@@ -188,6 +185,6 @@ void DrawRaycast(const Player player, Color *pixels) {
         // DrawFloorCeil2(i, wallProjHeight, projPlaneDist, worldWallHeight, player, ray, pixels);
         DrawWall3(i, wallProjStart, wallProjEnd, prevWallProjTop, prevWallProjBot, polar, minX, minY, pixels);
 
-        free(hits);
+        MemFree(hits);
     }
 }
